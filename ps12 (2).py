@@ -354,7 +354,23 @@ class Patient(SimplePatient):
         returns: the total virus population at the end of the update (an
         integer)
         """
-        # TODO
+        delete_index = []
+        for i in range(len(self.viruses)):
+            if self.viruses[i].doesClear():
+                delete_index.append(i)
+        for d in delete_index:
+            self.viruses[d] = '!'
+        for i in range(0,self.viruses.count('!')):
+            self.viruses.remove('!')         
+        popDensity = float(self.getTotalPop()/self.maxPop)
+        nextGen=[]
+        for j in self.viruses:
+            try:
+                nextGen.append(j.reproduce(popDensity,self.getPrescriptions()))
+            except NoChildException:
+                pass
+        self.viruses.extend(nextGen)
+        return self.getTotalPop()
 
 #
 # PROBLEM 4
