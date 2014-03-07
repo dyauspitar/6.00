@@ -303,7 +303,7 @@ class Patient(SimplePatient):
 
         postcondition: list of drugs being administered to a patient is updated
         """
-        if newDrug not in self.listofdurg:
+        if newDrug not in self.listofdrug:
             self.listofdrug.append(newDrug)
 
     def getPrescriptions(self):
@@ -326,7 +326,7 @@ class Patient(SimplePatient):
         returns: the population of viruses (an integer) with resistances to all
         drugs in the drugResist list.
         """
-        pop=[True]*len(viruses)
+        pop=[True]*len(self.viruses)
         for i in range(len(self.viruses)):
             for j in drugResist:
                 if self.viruses[i].getResistance(j) == False:
@@ -386,7 +386,35 @@ def problem4():
     total virus population vs. time  and guttagonol-resistant virus population
     vs. time are plotted
     """
-    # TODO
+    viruses = []
+    means_t = []
+    means_r = []
+    i=0
+    j=0
+    k=0
+    while (i<100):
+        viruses.append(ResistantVirus(0.1,0.05,{'guttagonol':False},0.005))
+        i+=1
+    p=Patient(viruses,1000)
+    while (j<150):
+        means_t.append(p.update())
+        means_r.append(p.getResistPop(['guttagonol']))
+        j+=1
+    p.addPrescription('guttagonol')
+    while (k<150):
+        means_t.append(p.update())
+        means_r.append(p.getResistPop(['guttagonol']))
+        k+=1
+    pylab.figure()
+    p1=pylab.plot(means_t, label='total')
+    p2=pylab.plot(means_r, label='resist')
+    pylab.legend(loc='upper right')
+    pylab.ylabel('Virus population')
+    pylab.xlabel('Time')
+    pylab.title('Virus population over time')
+
+#problem4()    
+#pylab.show()
 
 #
 # PROBLEM 5
